@@ -52,16 +52,16 @@ async function run() {
             res.send(package);
         })
 
-        app.get('/packages/:packsId', async (req, res) => {
-            const id = req.params.id;
-            const query = { _id: ObjectId(id) };
-            const service = await packageCollection.findOne(query);
-            res.json(service)
-        })
+        // app.get('/packages/:packsId', async (req, res) => {
+        //     const id = req.params.id;
+        //     const query = { _id: ObjectId(id) };
+        //     const service = await packageCollection.findOne(query);
+        //     res.json(service)
+        // })
 
-        app.get("/packages/:id", async (req, res) => {
-            const id = req.params.id;
-            const query = { _id: ObjectId(id) };
+        app.get("/packages/:_id", async (req, res) => {
+            const id = req.params._id;
+            const query = { _id: ObjectId(_id) };
             const product = await packageCollection.findOne(query);
             res.json(product);
           });
