@@ -22,6 +22,8 @@ async function run() {
     try {
         await client.connect();
         const database = client.db("tour_Package");
+        const userCollection = database.collection("users");
+
         const packageCollection = database.collection("package");
         const setplan = database.collection("set_plan");
 
@@ -65,6 +67,39 @@ async function run() {
             const product = await packageCollection.findOne(query);
             res.json(product);
           });
+
+          app.get("/users/:email", async (req, res) => {
+            const email = req.params.email;
+            const query = { email: email };
+            const user = await userCollection.findOne(query);
+            let isAdmin = false;
+            if (user?.role === "admin") {
+              isAdmin = true;
+            }
+            res.json({ admin: isAdmin });
+          });
+
+          app.get("/users", async (req, res) => {
+            const cursor = userCollection.find({});
+            const user = await cursor.toArray();
+            res.send(user);
+          });
+          app.post("/users", async (req, res) => {
+            const user = req.body;
+            const result = await userCollection.insertOne(user);
+            res.json(result);
+            console.log(result);
+          });
+
+          app.put("/users", async (req, res) => {
+            const user = req.body;
+            const filter = { email: user.email };
+            const options = { upsert: true };
+            const updateDoc = { $set: user };
+            const result = await userCollection.updateOne(filter, updateDoc, options);
+            res.json(result);
+          });
+      
 
 
     }
