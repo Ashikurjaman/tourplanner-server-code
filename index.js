@@ -61,7 +61,7 @@ async function run() {
 
         app.get("/packages/:_id", async (req, res) => {
             const id = req.params._id;
-            const query = { _id: ObjectId(_id) };
+            const query = { _id: ObjectId(id) };
             const product = await packageCollection.findOne(query);
             res.json(product);
           });
